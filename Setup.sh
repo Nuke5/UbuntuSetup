@@ -35,8 +35,8 @@ wget -qO- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor | sudo
 echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee /etc/apt/sources.list.d/signal-xenial.list
 
 # ProtonVPN
-wget -q https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.10_all.deb -O protonvpn-release.deb
-sudo dpkg -i ./protonvpn-release.deb && rm protonvpn-release.deb
+wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb
+sudo dpkg -i ./protonvpn-stable-release_1.0.8_all.deb && sudo apt update
 
 # Quickemu PPA
 sudo apt-add-repository -y ppa:flexiondotorg/quickemu
@@ -163,14 +163,15 @@ cd "$TEMP_DEB"
 
 download_file "$(get_latest_github_url "localsend/localsend" "linux-x86-64.deb")" "localsend.deb" "Debian"
 download_file "$(get_latest_github_url "Heroic-Games-Launcher/HeroicGamesLauncher" "amd64.deb")" "heroic.deb" "Debian"
-download_file "$(get_latest_github_url "lutris/lutris" "amd64.deb")" "lutris.deb" "Debian"
+download_file "https://github.com/lutris/lutris/releases/download/v0.5.22/lutris_0.5.22_all.deb" "lutris.deb" "Debian"
 download_file "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" "bitwarden.deb" "Debian"
-download_file "https://obsidian.md/download/desktop/deb" "obsidian.deb" "Debian"
+download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "Debian"
 download_file "https://updates.safing.io/latest/linux_amd64/packages/portmaster-installer.deb" "portmaster.deb" "Debian"
 download_file "https://discord.com/api/download?platform=linux&format=deb" "discord.deb" "Debian"
 download_file "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" "vscode.deb" "Debian"
 download_file "https://cdn.fastly.steamstatic.com/client/installer/steam.deb" "steam.deb" "Debian"
 download_file "https://proton.me/download/authenticator/linux/ProtonAuthenticator_1.1.4_amd64.deb" "ProtonAuthenticator.deb" "Debian"
+download_file "https://github.com/quickemu-project/quickgui/releases/download/1.2.10/quickgui-1.2.10+1-linux.deb" "quickgui.deb" "Debian"
 
 if ls *.deb >/dev/null 2>&1; then
     sudo apt-get install -y ./*.deb || failed+=("Standalone .deb batch")
