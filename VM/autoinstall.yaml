@@ -44,16 +44,14 @@ autoinstall:
     toggle: null
     variant: ''
   locale: en_US.UTF-8
-  storage:
-    layout:
-      name: lvm
   network:
-    version: 2
     ethernets:
-      eth-default:
+      enp0s25:
         match:
-          name: en*
-        dhcp4: true
+          macaddress: 54:ee:75:6b:72:a4
+        set-name: enp0s25
+    version: 2
+    wifis: {}
   oem:
     install: auto
   snaps:
