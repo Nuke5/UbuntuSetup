@@ -69,6 +69,10 @@ echo '
 Package: *
 Pin: origin packages.mozilla.org
 Pin-Priority: 1000
+
+Package: firefox*
+Pin: release o=Ubuntu
+Pin-Priority: -1
 ' | sudo tee /etc/apt/preferences.d/mozilla > /dev/null
 
 sudo apt-get -o DPkg::Lock::Timeout=60 update
