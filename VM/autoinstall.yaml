@@ -55,9 +55,6 @@ autoinstall:
   oem:
     install: auto
   snaps:
-    - name: remmina
-      channel: stable
-      classic: false
     - name: thunderbird
       channel: stable
       classic: false
