@@ -85,7 +85,7 @@ APT_PKGS=(
     adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system 
     git intel-gpu-tools pdfcrack calibre signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
-    element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo
+    element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina
 )
 
 FLATPAK_PKGS=(
