@@ -99,6 +99,7 @@ FLATPAK_PKGS=(
     org.kde.kasts 
     org.kde.kleopatra
     com.moonlight_stream.Moonlight
+    org.nickvision.tubeconverter
 )
 
 # --- 4. Helper Functions ---
