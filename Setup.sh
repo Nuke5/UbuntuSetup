@@ -170,7 +170,7 @@ download_file "$(get_latest_github_url "Heroic-Games-Launcher/HeroicGamesLaunche
 download_file "https://github.com/lutris/lutris/releases/download/v0.5.22/lutris_0.5.22_all.deb" "lutris.deb" "Debian"
 download_file "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" "bitwarden.deb" "Debian"
 download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "Debian"
-download_file "https://updates.safing.io/latest/linux_amd64/packages/portmaster-installer.deb" "portmaster.deb" "Debian"
+download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.1.7_amd64.deb" "portmaster.deb" "Debian"
 download_file "https://discord.com/api/download?platform=linux&format=deb" "discord.deb" "Debian"
 download_file "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" "vscode.deb" "Debian"
 download_file "https://cdn.fastly.steamstatic.com/client/installer/steam.deb" "steam.deb" "Debian"
@@ -184,13 +184,9 @@ rm -rf "$TEMP_DEB"
 
 # --- 7. Snaps, AppImages & Tweaks ---
 sudo snap install gramps
-sudo snap install remmina
-
-for intf in audio-record avahi-observe cups-control mount-observe password-manager-service ssh-keys ssh-public-keys; do
-    sudo snap connect remmina:$intf :$intf
-done
 
 sudo systemctl mask tpm2.target
+sudo apt remove intel-media-va-driver
 
 # AppImage Handling
 APP_DIR="$USER_HOME/Apps"
