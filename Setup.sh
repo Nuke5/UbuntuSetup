@@ -89,7 +89,8 @@ APT_PKGS=(
     adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system 
     git intel-gpu-tools pdfcrack calibre brave-origin-nightly signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
-    element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina
+    element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina 
+    brave-origin-nightly
 )
 
 FLATPAK_PKGS=(
@@ -174,13 +175,15 @@ download_file "$(get_latest_github_url "localsend/localsend" "linux-x86-64.deb")
 download_file "$(get_latest_github_url "Heroic-Games-Launcher/HeroicGamesLauncher" "amd64.deb")" "heroic.deb" "Debian"
 download_file "https://github.com/lutris/lutris/releases/download/v0.5.22/lutris_0.5.22_all.deb" "lutris.deb" "Debian"
 download_file "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" "bitwarden.deb" "Debian"
-download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "Debian"
-download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.1.7_amd64.deb" "portmaster.deb" "Debian"
+download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "obsidian.deb" "Debian"
+download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.1.19_amd64.deb" "portmaster.deb" "Debian"
 download_file "https://discord.com/api/download?platform=linux&format=deb" "discord.deb" "Debian"
 download_file "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" "vscode.deb" "Debian"
 download_file "https://cdn.fastly.steamstatic.com/client/installer/steam.deb" "steam.deb" "Debian"
-download_file "https://proton.me/download/authenticator/linux/ProtonAuthenticator_1.1.4_amd64.deb" "ProtonAuthenticator.deb" "Debian"
+download_file "https://proton.me/download/authenticator/linux/ProtonAuthenticator_1.1.6_amd64.deb" "ProtonAuthenticator.deb" "Debian"
 download_file "https://github.com/quickemu-project/quickgui/releases/download/1.2.10/quickgui-1.2.10+1-linux.deb" "quickgui.deb" "Debian"
+download_file "https://github.com/ente-io/ente/releases/download/auth-v4.4.23/ente-auth-v4.4.23-x86_64.deb" "ente-auth.deb" "Debian"
+
 
 if ls *.deb >/dev/null 2>&1; then
     sudo apt-get install -y ./*.deb || failed+=("Standalone .deb batch")
