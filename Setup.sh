@@ -54,10 +54,6 @@ curl -fsSLo brave-browser-archive-keyring.gpg https://brave-browser-apt-release.
 sudo mv brave-browser-archive-keyring.gpg /usr/share/keyrings/
 curl -fsSLo brave-browser.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
 sudo mv brave-browser.sources /etc/apt/sources.list.d/
-#Brave Nightly
-sudo curl -fsSLo /usr/share/keyrings/brave-browser-nightly-archive-keyring.gpg https://brave-browser-apt-nightly.s3.brave.com/brave-browser-nightly-archive-keyring.gpg
-
-sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-nightly.sources https://brave-browser-apt-nightly.s3.brave.com/brave-browser.sources
 
 # Mozilla Firefox Pinning (Crucial for Ubuntu 22.04/24.04)
 wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
@@ -87,10 +83,10 @@ APT_PKGS=(
     vlc gimp thunderbird bridge-utils qpdf quickgui btop 
     ffmpegthumbnailer fastfetch flatpak gnome-software-plugin-flatpak 
     adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system 
-    git intel-gpu-tools pdfcrack calibre brave-origin-nightly signal-desktop
+    git intel-gpu-tools pdfcrack calibre brave signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
     element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina 
-    brave-origin-nightly
+    brave-origin
 )
 
 FLATPAK_PKGS=(
