@@ -20,8 +20,8 @@ USER_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 
 echo "[+] Initializing system and dependencies..."
 # Added 'software-properties-common' to ensure add-apt-repository works
-sudo apt update && sudo apt install -y apt-transport-https curl wget gpg unzip file software-properties-common
-
+sudo apt update && sudo apt install -y apt-transport-https curl wget gpg unzip file software-properties-common extrepo
+sudo extrepo enable librewolf && sudo extrepo update librewolf
 # PRE-EMPTIVE SNAP REMOVAL (Prevents Apt/Snap conflicts for Firefox)
 echo "[+] Removing Firefox Snap..."
 sudo snap remove firefox 2>/dev/null
@@ -80,19 +80,18 @@ sudo apt-get -o DPkg::Lock::Timeout=60 update
 
 # --- 3. Configuration & Package Lists ---
 APT_PKGS=(
-    vlc gimp thunderbird bridge-utils qpdf quickgui btop 
+    vlc gimp bridge-utils qpdf quickgui btop 
     ffmpegthumbnailer fastfetch flatpak gnome-software-plugin-flatpak 
     adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system 
     git intel-gpu-tools pdfcrack calibre brave signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
     element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina 
-    brave-origin
+    brave-origin sonobus lact librewolf
 )
 
 FLATPAK_PKGS=(
     com.mattjakeman.ExtensionManager 
     it.mijorus.gearlever 
-    net.pcsx2.PCSX2 
     org.kde.kasts 
     org.kde.kleopatra
     com.moonlight_stream.Moonlight
@@ -168,14 +167,11 @@ TEMP_DEB=$(mktemp -d)
 cd "$TEMP_DEB"
 
 download_file "$(get_latest_github_url "localsend/localsend" "linux-x86-64.deb")" "localsend.deb" "Debian"
-download_file "$(get_latest_github_url "Heroic-Games-Launcher/HeroicGamesLauncher" "amd64.deb")" "heroic.deb" "Debian"
-download_file "https://github.com/lutris/lutris/releases/download/v0.5.22/lutris_0.5.22_all.deb" "lutris.deb" "Debian"
 download_file "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" "bitwarden.deb" "Debian"
 download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "obsidian.deb" "Debian"
 download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.1.19_amd64.deb" "portmaster.deb" "Debian"
 download_file "https://discord.com/api/download?platform=linux&format=deb" "discord.deb" "Debian"
 download_file "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" "vscode.deb" "Debian"
-download_file "https://cdn.fastly.steamstatic.com/client/installer/steam.deb" "steam.deb" "Debian"
 download_file "https://proton.me/download/authenticator/linux/ProtonAuthenticator_1.1.6_amd64.deb" "ProtonAuthenticator.deb" "Debian"
 download_file "https://github.com/quickemu-project/quickgui/releases/download/1.2.10/quickgui-1.2.10+1-linux.deb" "quickgui.deb" "Debian"
 download_file "https://github.com/ente-io/ente/releases/download/auth-v4.4.23/ente-auth-v4.4.23-x86_64.deb" "ente-auth.deb" "Debian"
@@ -187,7 +183,7 @@ fi
 rm -rf "$TEMP_DEB"
 
 # --- 7. Snaps, AppImages & Tweaks ---
-sudo snap install gramps
+sudo snap install gramps thunderbird
 
 sudo systemctl mask tpm2.target
 sudo apt remove intel-media-va-driver
