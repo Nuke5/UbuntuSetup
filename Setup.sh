@@ -229,7 +229,6 @@ rm -rf "$TEMP_DEB"
 sudo snap install gramps thunderbird
 
 sudo systemctl mask tpm2.target
-sudo apt remove intel-media-va-driver
 
 # AppImage Handling
 APP_DIR="$USER_HOME/Apps"
