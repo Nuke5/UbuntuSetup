@@ -38,6 +38,10 @@ echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] 
 wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb
 sudo dpkg -i ./protonvpn-stable-release_1.0.8_all.deb && sudo apt update
 
+# Sonobus
+echo "deb http://pkg.sonobus.net/apt stable main" | sudo tee /etc/apt/sources.list.d/sonobus.list
+sudo wget -O /etc/apt/trusted.gpg.d/sonobus.gpg https://pkg.sonobus.net/apt/keyring.gpg
+
 # Quickemu PPA
 sudo apt-add-repository -y ppa:flexiondotorg/quickemu
 
@@ -86,7 +90,7 @@ APT_PKGS=(
     git intel-gpu-tools pdfcrack calibre brave signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
     element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina 
-    brave-origin librewolf remmina-plugin-rdp  remmina-plugin-secret
+    brave-origin librewolf remmina-plugin-rdp  remmina-plugin-secret sonobus
 )
 
 FLATPAK_PKGS=(
