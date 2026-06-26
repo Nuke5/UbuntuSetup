@@ -86,7 +86,7 @@ APT_PKGS=(
     git intel-gpu-tools pdfcrack calibre brave signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
     element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina 
-    brave-origin sonobus lact librewolf
+    brave-origin librewolf remmina-plugin-rdp  remmina-plugin-secret
 )
 
 FLATPAK_PKGS=(
@@ -95,6 +95,8 @@ FLATPAK_PKGS=(
     org.kde.kasts 
     org.kde.kleopatra
     com.moonlight_stream.Moonlight
+    dev.zed.Zed
+    io.github.ilya_zlobintsev.LACT
     org.nickvision.tubeconverter
 )
 
