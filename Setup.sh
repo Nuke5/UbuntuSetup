@@ -172,16 +172,53 @@ echo "[+] Handling standalone installers..."
 TEMP_DEB=$(mktemp -d)
 cd "$TEMP_DEB"
 
-download_file "$(get_latest_github_url "localsend/localsend" "linux-x86-64.deb")" "localsend.deb" "Debian"
-download_file "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" "bitwarden.deb" "Debian"
-download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "obsidian.deb" "Debian"
-download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.1.19_amd64.deb" "portmaster.deb" "Debian"
-download_file "https://discord.com/api/download?platform=linux&format=deb" "discord.deb" "Debian"
-download_file "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" "vscode.deb" "Debian"
-download_file "https://proton.me/download/authenticator/linux/ProtonAuthenticator_1.1.6_amd64.deb" "ProtonAuthenticator.deb" "Debian"
-download_file "https://github.com/quickemu-project/quickgui/releases/download/1.2.10/quickgui-1.2.10+1-linux.deb" "quickgui.deb" "Debian"
-download_file "https://github.com/ente-io/ente/releases/download/auth-v4.4.23/ente-auth-v4.4.23-x86_64.deb" "ente-auth.deb" "Debian"
+# LocalSend
+if is_installed "localsend"; then echo "[-] localsend (already installed)"; else
+    download_file "$(get_latest_github_url "localsend/localsend" "linux-x86-64.deb")" "localsend.deb" "Debian"
+fi
 
+# Bitwarden
+if is_installed "bitwarden"; then echo "[-] bitwarden (already installed)"; else
+    download_file "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" "bitwarden.deb" "Debian"
+fi
+
+# Obsidian
+if is_installed "obsidian"; then echo "[-] obsidian (already installed)"; else
+    download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "obsidian.deb" "Debian"
+fi
+
+# Portmaster
+if is_installed "portmaster"; then echo "[-] portmaster (already installed)"; else
+    download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.1.19_amd64.deb" "portmaster.deb" "Debian"
+fi
+
+# Discord
+if is_installed "discord"; then echo "[-] discord (already installed)"; else
+    download_file "https://discord.com/api/download?platform=linux&format=deb" "discord.deb" "Debian"
+fi
+
+# VS Code (Installs as 'code')
+if is_installed "code"; then echo "[-] vscode (already installed)"; else
+    download_file "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" "vscode.deb" "Debian"
+fi
+
+# Proton Authenticator
+if is_installed "proton-authenticator"; then echo "[-] proton-authenticator (already installed)"; else
+    download_file "https://proton.me/download/authenticator/linux/ProtonAuthenticator_1.1.6_amd64.deb" "ProtonAuthenticator.deb" "Debian"
+fi
+
+# Ente Auth
+if is_installed "ente-auth"; then echo "[-] ente-auth (already installed)"; else
+    download_file "https://github.com/ente-io/ente/releases/download/auth-v4.4.23/ente-auth-v4.4.23-x86_64.deb" "ente-auth.deb" "Debian"
+fi
+
+# Only attempt batch install if any .deb files were actually downloaded
+if ls *.deb >/dev/null 2>&1; then
+    sudo apt-get install -y ./*.deb || failed+=("Standalone .deb batch")
+else
+    echo "[-] No new standalone .deb packages to install."
+fi
+rm -rf "$TEMP_DEB"
 
 if ls *.deb >/dev/null 2>&1; then
     sudo apt-get install -y ./*.deb || failed+=("Standalone .deb batch")
