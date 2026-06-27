@@ -84,19 +84,19 @@ sudo apt-get -o DPkg::Lock::Timeout=60 update
 
 # --- 3. Configuration & Package Lists ---
 APT_PKGS=(
-    vlc gimp bridge-utils qpdf quickgui btop 
-    ffmpegthumbnailer fastfetch flatpak gnome-software-plugin-flatpak 
-    adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system 
+    vlc gimp bridge-utils qpdf quickgui btop
+    ffmpegthumbnailer fastfetch flatpak gnome-software-plugin-flatpak
+    adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system
     git intel-gpu-tools pdfcrack calibre brave signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
-    element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina 
-    brave-origin librewolf remmina-plugin-rdp  remmina-plugin-secret sonobus
+    element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina
+    brave-origin librewolf remmina-plugin-rdp remmina-plugin-secret sonobus intel-media-va-driver-non-free
 )
 
 FLATPAK_PKGS=(
-    com.mattjakeman.ExtensionManager 
-    it.mijorus.gearlever 
-    org.kde.kasts 
+    com.mattjakeman.ExtensionManager
+    it.mijorus.gearlever
+    org.kde.kasts
     org.kde.kleopatra
     com.moonlight_stream.Moonlight
     dev.zed.Zed
@@ -120,7 +120,7 @@ download_file() {
     local url=$1
     local output=$2
     local expected_type=$3
-    
+
     if [ -z "$url" ]; then
         echo "❌ URL for $output is empty. Skipping."
         failed+=("$output (URL not found)")
