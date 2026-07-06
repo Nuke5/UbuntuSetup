@@ -189,7 +189,7 @@ fi
 
 # Portmaster
 if is_installed "portmaster"; then echo "[-] portmaster (already installed)"; else
-    download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.1.19_amd64.deb" "portmaster.deb" "Debian"
+    download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.2.1_amd64.deb" "portmaster.deb" "Debian"
 fi
 
 # Discord
