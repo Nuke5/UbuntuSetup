@@ -102,6 +102,7 @@ FLATPAK_PKGS=(
     dev.zed.Zed
     io.github.ilya_zlobintsev.LACT
     org.nickvision.tubeconverter
+    com.bitwarden.desktop
 )
 
 # --- 4. Helper Functions ---
@@ -177,11 +178,6 @@ if is_installed "localsend"; then echo "[-] localsend (already installed)"; else
     download_file "$(get_latest_github_url "localsend/localsend" "linux-x86-64.deb")" "localsend.deb" "Debian"
 fi
 
-# Bitwarden
-if is_installed "bitwarden"; then echo "[-] bitwarden (already installed)"; else
-    download_file "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" "bitwarden.deb" "Debian"
-fi
-
 # Obsidian
 if is_installed "obsidian"; then echo "[-] obsidian (already installed)"; else
     download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "obsidian.deb" "Debian"
@@ -251,6 +247,15 @@ fi
 chmod +x *.AppImage
 # Final ownership sweep to ensure $REAL_USER owns everything in ~/Apps
 sudo chown -R "$REAL_USER:$REAL_USER" "$APP_DIR"
+
+# Post install app config
+# bitwarden biometric unlock with flatpak
+# copy policy from Github
+sudo wget -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy https://raw.githubusercontent.com/bitwarden/clients/main/apps/desktop/resources/com.bitwarden.desktop.policy
+#Change the ownership
+sudo chown root:root /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+#Change the file security context
+sudo chcon system_u:object_r:usr_t:s0 /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
 # --- 8. Summary ---
 echo -e "\n===== Install Summary ====="
