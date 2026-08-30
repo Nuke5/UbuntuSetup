@@ -39,8 +39,8 @@ wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-st
 sudo dpkg -i ./protonvpn-stable-release_1.0.8_all.deb && sudo apt update
 
 # Sonobus
-echo "deb http://pkg.sonobus.net/apt stable main" | sudo tee /etc/apt/sources.list.d/sonobus.list
-sudo wget -O /etc/apt/trusted.gpg.d/sonobus.gpg https://pkg.sonobus.net/apt/keyring.gpg
+sudo wget -O /etc/apt/keyrings/sonobus.gpg https://pkg.sonobus.net/apt/keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/sonobus.gpg] http://pkg.sonobus.net/apt stable main" | sudo tee /etc/apt/sources.list.d/sonobus.list
 
 # Quickemu PPA
 sudo apt-add-repository -y ppa:flexiondotorg/quickemu
