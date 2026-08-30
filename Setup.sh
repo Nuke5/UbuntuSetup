@@ -35,8 +35,10 @@ wget -qO- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor | sudo
 echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee /etc/apt/sources.list.d/signal-xenial.list
 
 # ProtonVPN
-wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb
-sudo dpkg -i ./protonvpn-stable-release_1.0.8_all.deb && sudo apt update
+wget -qO /tmp/protonvpn.deb https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.8_all.deb
+sudo dpkg -i /tmp/protonvpn.deb
+rm /tmp/protonvpn.deb
+sudo apt update
 
 # Sonobus
 sudo wget -O /etc/apt/keyrings/sonobus.gpg https://pkg.sonobus.net/apt/keyring.gpg
@@ -87,7 +89,7 @@ APT_PKGS=(
     vlc gimp bridge-utils qpdf quickgui btop
     ffmpegthumbnailer fastfetch flatpak gnome-software-plugin-flatpak
     adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system
-    git intel-gpu-tools pdfcrack calibre brave signal-desktop
+    git intel-gpu-tools pdfcrack calibre signal-desktop
     proton-vpn-gnome-desktop quickemu libopengl0 firefox gnome-tweaks
     element-desktop syncthing brave-browser gnome-sushi i965-va-driver vainfo remmina
     brave-origin librewolf remmina-plugin-rdp remmina-plugin-secret sonobus intel-media-va-driver-non-free
