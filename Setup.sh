@@ -259,7 +259,34 @@ sudo chown root:root /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 #Change the file security context
 sudo chcon system_u:object_r:usr_t:s0 /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
-# --- 8. Summary ---
+# --- 8. Configure Gnome Settings and shortcuts ---
+# Task Manager
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Task Manager'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'resources'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Shift><Control>Escape'
+
+# Switch to Laptop Audio Output
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name 'Switch to Laptop Audio'
+#grep results as wpctl IDs change on reboot
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'sh -c 'wpctl set-default $(wpctl status | grep -A 5 \"Sinks:\" | grep \"ThinkPad OneLink Pro Dock Audio Analog Stereo\" | grep -oE \"[0-9]+\\.\" | head -n 1 | tr -d \".\") && notify-send \"Audio Output\" \"Switched to Dock Audio\"''
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding '<Shift><Control>1'
+
+# Switch to Dock Audio Output
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name 'Switch to Dock Audio'
+#grep results as wpctl IDs change on reboot
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command 'sh -c 'wpctl set-default $(wpctl status | grep -A 5 \"Sinks:\" | grep \"ThinkPad OneLink Pro Dock Audio Analog Stereo\" | grep -oE \"[0-9]+\\.\" | head -n 1 | tr -d \".\") && notify-send \"Audio Output\" \"Switched to Dock Audio\"''
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding '<Shift><Control>1'
+
+# Home Folder
+gsettings set org.gnome.settings-daemon.plugins.media-keys home "['<Super>e']"
+
+# Settings
+gsettings set org.gnome.settings-daemon.plugins.media-keys info "['<Super>i']"
+
+# Decrease Volume Stepping
+gsettings set org.gnome.settings-daemon.plugins.media-keys volume-step 2
+
+# --- 9. Summary ---
 echo -e "\n===== Install Summary ====="
 if [ ${#failed[@]} -eq 0 ]; then
     echo "✅ System configured successfully!"
