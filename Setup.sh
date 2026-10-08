@@ -261,7 +261,7 @@ echo "[+] Configuring GNOME settings for $REAL_USER..."
 # Helper to run gsettings as user
 run_as_user() {
     local user_uid=$(id -u "$REAL_USER")
-    sudo -u "$REAL_USER" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${user_uid}/bus" "$@"
+    sudo -u "$REAL_USER" env DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${user_uid}/bus" "$@"
 }
 
 # Register custom keybinding paths in GNOME
@@ -275,14 +275,34 @@ run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-ke
 run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "'resources'"
 run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "'<Shift><Control>Escape'"
 
+# Helper scripts for Audio Switching
+AUDIO_SCRIPT_DIR="$USER_HOME/.local/bin"
+AUDIO_SCRIPT_LAPTOP="$AUDIO_SCRIPT_DIR/switch-audio-laptop.sh"
+AUDIO_SCRIPT_DOCK="$AUDIO_SCRIPT_DIR/switch-audio-dock.sh"
+
+sudo -u "$REAL_USER" mkdir -p "$AUDIO_SCRIPT_DIR"
+
+sudo -u "$REAL_USER" cat << 'EOF' > "$AUDIO_SCRIPT_LAPTOP"
+#!/bin/bash
+wpctl set-default $(wpctl status | grep -B1 'Built-in Audio Analog Stereo' | grep -oE '[0-9]+\.' | tr -d '.') && notify-send 'Audio Output' 'Switched to Laptop Speakers'
+EOF
+sudo -u "$REAL_USER" chmod +x "$AUDIO_SCRIPT_LAPTOP"
+
+sudo -u "$REAL_USER" cat << 'EOF' > "$AUDIO_SCRIPT_DOCK"
+#!/bin/bash
+wpctl set-default $(wpctl status | grep -A 5 'Sinks:' | grep 'ThinkPad OneLink Pro Dock Audio Analog Stereo' | grep -oE '[0-9]+\.' | head -n 1 | tr -d '.') && notify-send 'Audio Output' 'Switched to Dock Audio'
+EOF
+sudo -u "$REAL_USER" chmod +x "$AUDIO_SCRIPT_DOCK"
+
+
 # Switch to Laptop Audio Output (<Ctrl><Shift>1)
 run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name "'Switch to Laptop Audio'"
-run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command "'sh -c \"wpctl set-default \$(wpctl status | grep -B1 'Built-in Audio Analog Stereo' | grep -oE '[0-9]+\\\\.' | tr -d '.') && notify-send 'Audio Output' 'Switched to Laptop Speakers'\"'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command "'$AUDIO_SCRIPT_LAPTOP'"
 run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding "'<Shift><Control>1'"
 
 # Switch to Dock Audio Output (<Ctrl><Shift>2)
 run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name "'Switch to Dock Audio'"
-run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command "'sh -c \"wpctl set-default \$(wpctl status | grep -A 5 'Sinks:' | grep 'ThinkPad OneLink Pro Dock Audio Analog Stereo' | grep -oE '[0-9]+\\\\.' | head -n 1 | tr -d '.') && notify-send 'Audio Output' 'Switched to Dock Audio'\"'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command "'$AUDIO_SCRIPT_DOCK'"
 run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding "'<Shift><Control>2'"
 
 # General Shortcuts
