@@ -216,11 +216,7 @@ if ls *.deb >/dev/null 2>&1; then
 else
     echo "[-] No new standalone .deb packages to install."
 fi
-rm -rf "$TEMP_DEB"
-
-if ls *.deb >/dev/null 2>&1; then
-    sudo apt-get install -y ./*.deb || failed+=("Standalone .deb batch")
-fi
+cd "$USER_HOME"
 rm -rf "$TEMP_DEB"
 
 # --- 7. Snaps, AppImages & Tweaks ---
@@ -260,31 +256,39 @@ sudo chown root:root /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 sudo chcon system_u:object_r:usr_t:s0 /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
 # --- 8. Configure Gnome Settings and shortcuts ---
-# Task Manager
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Task Manager'
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'resources'
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Shift><Control>Escape'
+echo "[+] Configuring GNOME settings for $REAL_USER..."
 
-# Switch to Laptop Audio Output
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name 'Switch to Laptop Audio'
-#grep results as wpctl IDs change on reboot
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command 'sh -c 'wpctl set-default $(wpctl status | grep -A 5 \"Sinks:\" | grep \"ThinkPad OneLink Pro Dock Audio Analog Stereo\" | grep -oE \"[0-9]+\\.\" | head -n 1 | tr -d \".\") && notify-send \"Audio Output\" \"Switched to Dock Audio\"''
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding '<Shift><Control>1'
+# Helper to run gsettings as user
+run_as_user() {
+    local user_uid=$(id -u "$REAL_USER")
+    sudo -u "$REAL_USER" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${user_uid}/bus" "$@"
+}
 
-# Switch to Dock Audio Output
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name 'Switch to Dock Audio'
-#grep results as wpctl IDs change on reboot
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command 'sh -c 'wpctl set-default $(wpctl status | grep -A 5 \"Sinks:\" | grep \"ThinkPad OneLink Pro Dock Audio Analog Stereo\" | grep -oE \"[0-9]+\\.\" | head -n 1 | tr -d \".\") && notify-send \"Audio Output\" \"Switched to Dock Audio\"''
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding '<Shift><Control>1'
+# Register custom keybinding paths in GNOME
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings \
+"['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', \
+  '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', \
+  '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']"
 
-# Home Folder
-gsettings set org.gnome.settings-daemon.plugins.media-keys home "['<Super>e']"
+# Task Manager (<Ctrl><Shift>Esc)
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "'Task Manager'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "'resources'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "'<Shift><Control>Escape'"
 
-# Settings
-gsettings set org.gnome.settings-daemon.plugins.media-keys info "['<Super>i']"
+# Switch to Laptop Audio Output (<Ctrl><Shift>1)
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name "'Switch to Laptop Audio'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command "'sh -c \"wpctl set-default \$(wpctl status | grep -B1 'Built-in Audio Analog Stereo' | grep -oE '[0-9]+\\\\.' | tr -d '.') && notify-send 'Audio Output' 'Switched to Laptop Speakers'\"'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding "'<Shift><Control>1'"
 
-# Decrease Volume Stepping
-gsettings set org.gnome.settings-daemon.plugins.media-keys volume-step 2
+# Switch to Dock Audio Output (<Ctrl><Shift>2)
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name "'Switch to Dock Audio'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command "'sh -c \"wpctl set-default \$(wpctl status | grep -A 5 'Sinks:' | grep 'ThinkPad OneLink Pro Dock Audio Analog Stereo' | grep -oE '[0-9]+\\\\.' | head -n 1 | tr -d '.') && notify-send 'Audio Output' 'Switched to Dock Audio'\"'"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding "'<Shift><Control>2'"
+
+# General Shortcuts
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys home "['<Super>e']"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys info "['<Super>i']"
+run_as_user gsettings set org.gnome.settings-daemon.plugins.media-keys volume-step 2
 
 # --- 9. Summary ---
 echo -e "\n===== Install Summary ====="
