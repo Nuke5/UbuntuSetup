@@ -284,7 +284,7 @@ sudo -u "$REAL_USER" mkdir -p "$AUDIO_SCRIPT_DIR"
 
 sudo -u "$REAL_USER" cat << 'EOF' > "$AUDIO_SCRIPT_LAPTOP"
 #!/bin/bash
-wpctl set-default $(wpctl status | grep -B1 'Built-in Audio Analog Stereo' | grep -oE '[0-9]+\.' | tr -d '.') && notify-send 'Audio Output' 'Switched to Laptop Speakers'
+wpctl set-default $(wpctl status | sed -n '/Sinks:/,/Sources:/p' | grep 'Built-in Audio Analog Stereo' | grep -oE '[0-9]+' | head -n1) && notify-send 'Audio Output' 'Switched to Laptop Speakers'
 EOF
 sudo -u "$REAL_USER" chmod +x "$AUDIO_SCRIPT_LAPTOP"
 
