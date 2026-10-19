@@ -217,6 +217,9 @@ else
     echo "[-] No new standalone .deb packages to install."
 fi
 cd "$USER_HOME"
+mkdir -p Projects
+mkdir -p Tweaks
+mkdir -p VM
 rm -rf "$TEMP_DEB"
 
 # --- 7. Snaps, AppImages & Tweaks ---
