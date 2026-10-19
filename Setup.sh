@@ -105,6 +105,8 @@ FLATPAK_PKGS=(
     io.github.ilya_zlobintsev.LACT
     org.nickvision.tubeconverter
     com.bitwarden.desktop
+    org.musicbrainz.Picard
+    org.kiwix.desktop
 )
 
 # --- 4. Helper Functions ---
@@ -182,12 +184,12 @@ fi
 
 # Obsidian
 if is_installed "obsidian"; then echo "[-] obsidian (already installed)"; else
-    download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/obsidian_1.12.7_amd64.deb" "obsidian.deb" "Debian"
+    download_file "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.4/obsidian_1.14.4_amd64.deb" "obsidian.deb" "Debian"
 fi
 
 # Portmaster
 if is_installed "portmaster"; then echo "[-] portmaster (already installed)"; else
-    download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.2.1_amd64.deb" "portmaster.deb" "Debian"
+    download_file "https://updates.safing.io/latest/linux_amd64/packages/Portmaster_2.2.3_amd64.deb" "portmaster.deb" "Debian"
 fi
 
 # Discord
@@ -207,7 +209,7 @@ fi
 
 # Ente Auth
 if is_installed "ente-auth"; then echo "[-] ente-auth (already installed)"; else
-    download_file "https://github.com/ente-io/ente/releases/download/auth-v4.4.23/ente-auth-v4.4.23-x86_64.deb" "ente-auth.deb" "Debian"
+    download_file "https://github.com/ente/ente/releases/download/auth-v4.4.26/ente-auth-v4.4.26-x86_64.deb" "ente-auth.deb" "Debian"
 fi
 
 # Only attempt batch install if any .deb files were actually downloaded
