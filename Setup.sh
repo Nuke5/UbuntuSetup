@@ -86,7 +86,7 @@ sudo apt-get -o DPkg::Lock::Timeout=60 update
 
 # --- 3. Configuration & Package Lists ---
 APT_PKGS=(
-    vlc gimp bridge-utils qpdf quickgui btop
+    vlc gimp bridge-utils qpdf btop
     ffmpegthumbnailer fastfetch flatpak gnome-software-plugin-flatpak
     adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system
     git intel-gpu-tools pdfcrack calibre signal-desktop
@@ -212,12 +212,26 @@ if is_installed "ente-auth"; then echo "[-] ente-auth (already installed)"; else
     download_file "https://github.com/ente/ente/releases/download/auth-v4.4.26/ente-auth-v4.4.26-x86_64.deb" "ente-auth.deb" "Debian"
 fi
 
-# Only attempt batch install if any .deb files were actually downloaded
+# Quickgui
+if is_installed "quickgui"; then echo "[-] quickgui (already installed)"; else
+    download_file "$(get_latest_github_url "quickemu-project/quickgui" "linux.deb")" "quickgui.deb" "Debian"
+fi
+
+# Install downloaded .deb files individually so a failure 
+# does not block the installation of other valid applications
 if ls *.deb >/dev/null 2>&1; then
-    sudo apt-get install -y ./*.deb || failed+=("Standalone .deb batch")
+    for deb in *.deb; do
+        if [ -f "$deb" ]; then
+            echo "[+] Installing $deb..."
+            if ! sudo apt-get install -y "./$deb"; then
+                failed+=("$deb (standalone deb)")
+            fi
+        fi
+    done
 else
     echo "[-] No new standalone .deb packages to install."
 fi
+
 cd "$USER_HOME"
 mkdir -p Projects
 mkdir -p Tweaks
