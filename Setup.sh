@@ -86,7 +86,7 @@ sudo apt-get -o DPkg::Lock::Timeout=60 update
 
 # --- 3. Configuration & Package Lists ---
 APT_PKGS=(
-    vlc gimp bridge-utils qpdf btop
+    vlc gimp bridge-utils qpdf mpv pigz btop
     ffmpegthumbnailer fastfetch flatpak gnome-software-plugin-flatpak
     adb virt-manager 7zip grsync qemu-system-x86 ffmpeg libvirt-daemon-system
     git intel-gpu-tools pdfcrack calibre signal-desktop
